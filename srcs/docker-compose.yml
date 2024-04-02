@@ -1,0 +1,47 @@
+version: '3.5'
+
+services:
+# MariaDB Service
+  mariadb:
+    build: ./requirements/mariadb
+    ports:
+      - 3306:3306
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    env_file:
+      - .env
+    networks:
+      - management
+# Nginx Service
+  nginx:
+    build: ./requirements/nginx
+    ports:
+      - 443:443
+    volumes:
+      - wordpress-data:/var/www/html
+    env_file:
+      - .env
+    depends_on:
+      - wordpress
+    networks:
+      - management
+# Wordpress Service 
+  wordpress:
+    build: ./requirements/wordpress
+    ports:
+      - 9000:9000
+    volumes:
+      - wordpress-data:/var/www/html
+    env_file:
+      - .env
+    depends_on:
+      - mariadb
+    networks:
+      - management
+
+volumes:
+  wordpress-data:
+  mariadb-data:
+
+networks:
+  management:

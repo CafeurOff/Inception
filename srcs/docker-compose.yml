@@ -1,17 +1,4 @@
-version: '3.5'
-
 services:
-# MariaDB Service
-  mariadb:
-    build: ./requirements/mariadb
-    ports:
-      - 3306:3306
-    volumes:
-      - mariadb-data:/var/lib/mysql
-    env_file:
-      - .env
-    networks:
-      - management
 # Nginx Service
   nginx:
     build: ./requirements/nginx
@@ -38,10 +25,31 @@ services:
       - mariadb
     networks:
       - management
+# MariaDB Service
+  mariadb:
+    build: ./requirements/mariadb
+    ports:
+      - 3306:3306
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    env_file:
+      - .env
+    networks:
+      - management
 
 volumes:
   wordpress-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/lduthill/data/wordpress
+      o: bind
   mariadb-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/lduthill/data/mariadb
+      o: bind
 
 networks:
   management:

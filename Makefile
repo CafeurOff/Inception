@@ -13,13 +13,16 @@ all: build
 build:
 	@clear
 	@echo "$(ORANGE)Building Inception..."
-	@cd srcs && docker-compose build
+	mkdir -p /home/lduthill/data/
+	mkdir -p /home/lduthill/data/wordpress
+	mkdir -p /home/lduthill/data/mariadb
+	@cd srcs && docker compose up -d --build
 	@echo "$(GREEN)Inception is ready to use !"
 
 down:
 	@clear
 	@echo "$(ORANGE)Stopping Inception..."
-	@cd srcs && docker-compose down -v --remove-orphans --rmi all --volume
+	@cd srcs && docker compose down -v --remove-orphans --rmi all --volume
 	@echo "$(GREEN)Inception is now stopped !"
 
 prune: down
